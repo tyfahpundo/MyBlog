@@ -1,12 +1,14 @@
 package zw.co.afrosoft.myblog.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import zw.co.afrosoft.myblog.domain.Post;
 import zw.co.afrosoft.myblog.dtos.PostDto;
 import zw.co.afrosoft.myblog.exception.ResourceNotFoundException;
 import zw.co.afrosoft.myblog.repository.PostRepository;
 import zw.co.afrosoft.myblog.service.PostService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,11 +32,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> postList = postRepository.findAll();
-        return postList.stream()
+    public Page<PostDto> getAllPosts(Pageable pageable) {
+        List<PostDto> postList = postRepository.findAll(pageable).stream()
                 .map(PostDto::createPostDto)
                 .collect(Collectors.toList());
+        return new PageImpl<>(postList, pageable,postList.size());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package zw.co.afrosoft.myblog.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import zw.co.afrosoft.myblog.dtos.PostDto;
 
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 public interface PostService {
     PostDto createPost(PostDto postDto);
 
-    List<PostDto> getAllPosts();
+    Page<PostDto> getAllPosts(Pageable pageable);
 
     PostDto getPostById(Long id);
 
