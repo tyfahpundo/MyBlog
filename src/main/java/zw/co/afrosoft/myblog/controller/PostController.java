@@ -1,5 +1,6 @@
 package zw.co.afrosoft.myblog.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -9,18 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import zw.co.afrosoft.myblog.dtos.PostDto;
 import zw.co.afrosoft.myblog.service.PostService;
 
-import java.util.List;
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/posts/")
+@AllArgsConstructor
 public class PostController {
     private final PostService postService;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+
     @PostMapping("create")
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto){
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto){
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
     @GetMapping("getAll")
@@ -32,7 +33,7 @@ public class PostController {
         return new ResponseEntity<>(postService.getPostById(id),HttpStatus.FOUND);
     }
     @PutMapping("{id}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,@PathVariable Long id){
+    public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto,@PathVariable Long id){
         return new ResponseEntity<>(postService.updatePost(postDto,id),HttpStatus.OK);
     }
     @DeleteMapping("{id}")
