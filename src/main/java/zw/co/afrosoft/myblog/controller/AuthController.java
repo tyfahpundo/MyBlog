@@ -20,45 +20,22 @@ import zw.co.afrosoft.myblog.dtos.SignUpDto;
 import zw.co.afrosoft.myblog.repository.RoleRepository;
 import zw.co.afrosoft.myblog.repository.UserRepository;
 import zw.co.afrosoft.myblog.repository.UserRoleRepository;
+import zw.co.afrosoft.myblog.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth/")
 @AllArgsConstructor
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRoleRepository userRoleRepository;
+    private final AuthService authService;
 
     @PostMapping("signin")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
-       Authentication authentication = authenticationManager
-               .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(),loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        authService.authenticateUser(loginDto);
         return new ResponseEntity<>("User signed in successfully", HttpStatus.OK);
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
-        if(userRepository.existsByUsername(signUpDto.getUsername())){
-            return new ResponseEntity<>("Username is already taken !",HttpStatus.BAD_REQUEST);
-        }
-        if(userRepository.existsByEmail(signUpDto.getEmail())){
-            return new ResponseEntity<>("Email already taken!",HttpStatus.BAD_REQUEST);
-        }
-        User user = new User();
-        user.setName(signUpDto.getName());
-        user.setUsername(signUpDto.getUsername());
-        user.setEmail(signUpDto.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
-
-        Role roles = roleRepository.findByName("ROLE_USER").get();
-        UserRole userRole = new UserRole();
-        userRole.setUser(user);
-        userRole.setRole(roles);
-        userRoleRepository.save(userRole);
-
-        userRepository.save(user);
+        authService.registerUser(signUpDto);
         return new ResponseEntity<>("User Registered Successfully",HttpStatus.OK);
 
     }

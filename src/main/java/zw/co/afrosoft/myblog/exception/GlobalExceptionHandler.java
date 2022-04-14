@@ -29,6 +29,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(UserNameAlreadyInUseException.class)
+    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(UserNameAlreadyInUseException exception, WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
     //handles global errors
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest webRequest){
