@@ -17,6 +17,7 @@ import zw.co.afrosoft.myblog.exception.UserNameAlreadyInUseException;
 import zw.co.afrosoft.myblog.repository.RoleRepository;
 import zw.co.afrosoft.myblog.repository.UserRepository;
 import zw.co.afrosoft.myblog.repository.UserRoleRepository;
+import zw.co.afrosoft.myblog.security.JwtTokenProvider;
 import zw.co.afrosoft.myblog.service.AuthService;
 @Service
 @AllArgsConstructor
@@ -26,13 +27,15 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleRepository userRoleRepository;
+    private final JwtTokenProvider tokenProvider;
 
 
     @Override
-    public void authenticateUser(LoginDto loginDto) {
+    public String authenticateUser(LoginDto loginDto) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(),loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        return tokenProvider.generateToken(authentication);
     }
 
     @Override

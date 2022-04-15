@@ -12,14 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zw.co.afrosoft.myblog.domain.Role;
-import zw.co.afrosoft.myblog.domain.User;
-import zw.co.afrosoft.myblog.domain.UserRole;
+import zw.co.afrosoft.myblog.dtos.JwtAuthResponse;
 import zw.co.afrosoft.myblog.dtos.LoginDto;
 import zw.co.afrosoft.myblog.dtos.SignUpDto;
-import zw.co.afrosoft.myblog.repository.RoleRepository;
-import zw.co.afrosoft.myblog.repository.UserRepository;
-import zw.co.afrosoft.myblog.repository.UserRoleRepository;
 import zw.co.afrosoft.myblog.service.AuthService;
 
 @RestController
@@ -28,10 +23,11 @@ import zw.co.afrosoft.myblog.service.AuthService;
 public class AuthController {
     private final AuthService authService;
 
+
     @PostMapping("signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
-        authService.authenticateUser(loginDto);
-        return new ResponseEntity<>("User signed in successfully", HttpStatus.OK);
+    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto){
+        String token = authService.authenticateUser(loginDto);
+        return ResponseEntity.ok(new JwtAuthResponse(token));
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
