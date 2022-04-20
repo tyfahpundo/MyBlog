@@ -3,10 +3,7 @@ package zw.co.afrosoft.myblog.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zw.co.afrosoft.myblog.dtos.JwtAuthResponse;
 import zw.co.afrosoft.myblog.dtos.LoginDto;
 import zw.co.afrosoft.myblog.dtos.SignUpDto;
@@ -14,6 +11,7 @@ import zw.co.afrosoft.myblog.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth/")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
