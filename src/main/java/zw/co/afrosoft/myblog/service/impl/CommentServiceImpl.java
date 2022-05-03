@@ -12,7 +12,6 @@ import zw.co.afrosoft.myblog.repository.PostRepository;
 import zw.co.afrosoft.myblog.service.CommentService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -41,9 +40,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getCommentsByPostId(long postId) {
         List<Comment> comments = commentRepository.findByPostId(postId);
-        return comments.stream()
-                .map(CommentDto::createCommentDto)
-                .collect(Collectors.toList());
+        return CommentDto.createCommentDtoList(comments);
     }
 
     @Override

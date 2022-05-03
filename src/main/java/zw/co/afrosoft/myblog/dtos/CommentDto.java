@@ -7,6 +7,8 @@ import zw.co.afrosoft.myblog.domain.Comment;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -23,5 +25,10 @@ public class CommentDto {
 
     public static CommentDto createCommentDto(Comment comment){
         return new CommentDto(comment.getId(), comment.getName(), comment.getEmail(), comment.getBody());
+    }
+    public static List<CommentDto> createCommentDtoList(List<Comment> comments){
+        return comments.stream()
+                .map(CommentDto::createCommentDto)
+                .collect(Collectors.toList());
     }
 }
